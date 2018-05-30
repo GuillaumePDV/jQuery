@@ -28,9 +28,10 @@ gulp.task('concat', function() {
             // './app/javascript/02-fondamenteaux.js',
             // './app/javascript/03-getters-setters.js',
             // './app/javascript/04-add-elem-dom.js',
-            // './app/javascript/05-nav.js',
-            // './app/javascript/06-slider.js',
+            './app/javascript/05-nav.js',
+            './app/javascript/06-slider.js',
             './app/javascript/07-lightbox.js',
+            './app/javascript/08-accordeon.js',
             
         ])
         .pipe(concat('production.js'))
