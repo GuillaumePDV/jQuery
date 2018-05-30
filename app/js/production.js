@@ -21,28 +21,62 @@ null==d?void 0:d))},attrHooks:{type:{set:function(a,b){if(!o.radioValue&&"radio"
 // On doit dabord récupérer dans une variable le nb total d'img, ainsi on pourra revenir à l'index 0 quand on aura atteint la dernièrer img
 // et revenir à la dernière img quand on aura atteint l'index
 
+// Etape 7
+// 7.1 récup index li cliqué .index()
+// 7.2 récup attr src de l'img qui a le même index eq()
+// 7.3 modifier l'attr src de .lightbox img
+// 7.4 Remove class sur toutes les puces
+// 7.5 AddClass sur this Puce
+
 $(function () {
 
     let index;
     let newSrc;
+    let legend;
     let nbImg;
+    let listPuces;
 
     nbImg = $('.galerie img').length;
-    console.log(nbImg);
+
+    generatePuces = () => {
+        listPuces = '<ul class="list-puces">';
+        for (let i = 0; i < nbImg; i++) {
+            listPuces += '<li></li>';
+        }
+        listPuces += '</ul>';
+        $(".lightbox .cadre").append(listPuces);
+    }
+
+    generatePuces();
+
+    activePuce = () => {
+        $('.lightbox ul li').removeClass('puce-active');
+        $('.lightbox ul li').eq(index).addClass('puce-active');
+    }
+
+    getImgDataLegend = () => {
+        legend = $('.galerie img').eq(index).attr('data-legend');
+        $('.lightbox figcaption').text(legend);
+    }
+
+    updateImg = () => {
+        newSrc = $('.galerie img').eq(index).attr('src');
+        $('.lightbox img').attr('src', newSrc);
+        activePuce();
+        getImgDataLegend();
+    }
+
+    $('.lightbox ul li').click(function () {
+        index = $('.lightbox  ul li').index($(this));
+        updateImg();
+    });
 
     $('.galerie img').click(function () {
         $('.lightbox').fadeIn(500).css({
             'display': 'flex'
         });
-        newSrc = $(this).attr('src');
-        $('.lightbox img').attr('src', newSrc);
-
         index = $('.galerie img').index($(this));
-        console.log(index);
-
-        // newSrc = $('.galerie img').eq(index + 1).attr('src');
-        // console.log(newSrc);
-
+        updateImg();
     });
 
     $('.icon-navigate_next').click(function () {
@@ -52,21 +86,24 @@ $(function () {
         //     index = 0;
         // }
         index = (index + 1) % nbImg;
-        newSrc = $('.galerie img').eq(index).attr('src');
-        console.log(newSrc);
-        $('.lightbox img').attr('src', newSrc);
+        updateImg();
     })
 
     $('.icon-navigate_before').click(function () {
-        console.log(index);
         index = ((index - 1) + nbImg) % nbImg;
-        newSrc = $('.galerie img').eq(index).attr('src');
-        $('.lightbox img').attr('src', newSrc);
+        updateImg();
     })
-
+    
     $('.lightbox .icon-close').click(function () {
         $('.lightbox').fadeOut(500);
     });
-
+    
+    $('.lightbox').click(function(){
+        $(this).fadeOut();
+    })
+    
+    $('.lightbox .cadre').click(function(e){
+        e.stopPropagation();
+    })
 
 }); // ne pas supprimer svp
